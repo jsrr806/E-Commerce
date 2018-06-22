@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+{% extends "home/base.html" %}
+{%  load staticfiles %}
+{% block style_block %}
+  <style>
+  footer {
+        background-color: #f2f2f2;
+        padding: 25px;
+      }
+  </style>
+{% endblock %}
+{% block body_block %}
+<div class="container">
+
+  <div class="row">
+    {% if object_list %}
+       {% for acc in object_list %}
+    <div class="col-sm-4">
+      <div class="panel panel-primary">
+
+        <div class="panel-heading"><h3>Company{{ acc.company }}<br/></h3> <h3>Model {{ acc.model }}</h3></div>
+        {% if acc.image %}
+
+          <div class="panel-body"><a href='{{ acc.get_absolut_url }}'><img src="{{ acc.image.url }}" class="img-responsive" style="width:100%" alt="Image"></a></div>
+        {% endif %}
+        <div class="panel-footer"><h3>Price--${{acc.price}}</h3> </div>
+      </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p>Not found: empty</p>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

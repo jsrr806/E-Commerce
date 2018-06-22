@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+{% extends "home/base.html" %}
+{%  load staticfiles %}
+{% block body_block %}
+<div class="w3-content w3-section" style="max-width:500px">
+  <img class="mySlides" src="{% static "images/r.png" %}" style="width:100%">
+  <img class="mySlides" src="{% static "images/r1.png" %}" style="width:70%">
+  <img class="mySlides" src="{% static "images/r2.jpeg" %}" style="width:100%">
+</div>
+
+<script>
+var myIndex = 0;
+carousel();
+
+function carousel() {
+    var i;
+    var x = document.getElementsByClassName("mySlides");
+    for (i = 0; i < x.length; i++) {
+       x[i].style.display = "none";
+    }
+    myIndex++;
+    if (myIndex > x.length) {myIndex = 1}
+    x[myIndex-1].style.display = "block";
+    setTimeout(carousel, 2000); // Change image every 2 seconds
+}
+</script>
+{% endblock%}
