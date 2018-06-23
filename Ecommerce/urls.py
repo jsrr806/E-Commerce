@@ -21,6 +21,7 @@ from django.conf import settings
 
 #from cart.views import cartHome
 from .views import home_page
+from userApp.views import user_logout
 urlpatterns = [
     # url(r'^$', include('homeApp.urls')),
     #path('cart/',cartHome,name='cart'),
@@ -28,5 +29,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'cart/',include('cart.urls',namespace='cart')),
     url(r'category/',include('categoryApp.urls',namespace='category')),
+    url(r'^userApp/',include('userApp.urls')),
+    url(r'^logout/$',user_logout, name='logout'),
     url(r'^search/', include("search.urls", namespace='search')),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
