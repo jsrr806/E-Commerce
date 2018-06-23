@@ -19,6 +19,7 @@ class SearchProductView(ListView):
         if query is not None:
             return Product.objects.filter(Q(title__icontains=query)|Q(company__icontains=query)|Q(model__icontains=query))
 
+
         '''
         __icontains = field contains this
         __iexact = fields is exactly this
