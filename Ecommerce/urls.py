@@ -30,6 +30,7 @@ urlpatterns = [
     url(r'cart/',include('cart.urls',namespace='cart')),
     url(r'category/',include('categoryApp.urls',namespace='category')),
     url(r'^userApp/',include('userApp.urls')),
+    url(r'^order/',include('order.urls')),
     url(r'^logout/$',user_logout, name='logout'),
     url(r'^search/', include("search.urls", namespace='search')),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
