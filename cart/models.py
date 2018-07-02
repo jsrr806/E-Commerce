@@ -10,6 +10,9 @@ class CartManager(models.Manager):
     def newCart_or_getCart(self,request):
         new_obj=False
         cart_id=request.session.get("cart_id",None)
+        print(request.session)
+        print(cart_id)
+        #print("abdekho")
         active_cart = Cart.objects.filter(id=cart_id)
 
         if active_cart.count() == 1:
@@ -40,7 +43,7 @@ class CartManager(models.Manager):
             if request.user.is_authenticated:
                 user_obj=request.user
                 cart_obj = Cart.objects.filter(user=user_obj).filter(active=True).first()
-            elif cart_obj is None:
+            if cart_obj is None:
                 cart_obj=Cart.objects.newCart(user=user_obj)
             request.session['cart_id']=cart_obj.id
         return cart_obj,new_obj
@@ -51,6 +54,9 @@ class CartManager(models.Manager):
             if user.is_authenticated:
                 user_obj=user
                 print(user)
+        #cart_obj=Cart.objects.filter(user=None)
+        #for item in cart_obj:
+        #    item.delete()
         return self.model.objects.create(user=user_obj)
 
 class Cart(models.Model):

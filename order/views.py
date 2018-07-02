@@ -11,7 +11,7 @@ def createOrder(request):
         order_obj=Order.objects.filter(cart=cart_obj).first()
         #print("hehehe")
         print(order_obj)
-        user_info=UserProfileInfo.objects.filter(users=request.user).first()
+        user_info=UserProfileInfo.objects.filter(user=request.user).first()
         print(user_info)
         if order_obj is None:
             Order.objects.create(cart=cart_obj)
@@ -21,14 +21,15 @@ def createOrder(request):
 
 def setAddress(request):
     address=request.POST.get('address')
-    #print("papa")
+    print("papa")
     order_id=request.POST.get('order_id')
+    print(order_id)
     order_obj=Order.objects.filter(order_id=order_id).first()
     order_obj.address=address
     print(request.POST.get('updateAddress'))
     order_obj.save()
     if request.POST.get('updateAddress') is not None:
-        user_obj=UserProfileInfo.objects.filter(users=request.user).first()
+        user_obj=UserProfileInfo.objects.filter(user=request.user).first()
         user_obj.address=order_obj.address
         user_obj.save()
     return render(request,'order/payment.html',{})

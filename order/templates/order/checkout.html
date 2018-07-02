@@ -1,13 +1,13 @@
 {% extends "home/base.html" %}
 {% block body_block %}
 <h1>Soon, We will add the feature of payment!</h1>
-<h2>{{order_obj.order_id}}</h2>
+<h2>{{order_obj}}</h2>
 <h2>{{cart_obj}}</h2>
 <h2>{{cart_obj.user.username}}</h2>
 <h2>{{order_obj.address}}</h2>
 <form class="form-horizontal" action="{% url 'order:setAddress' %}" method="POST">
   {% csrf_token %}
-  <input type="hidden" name="order_id" value="{{order_obj.order_id}}"/>
+  <input type="hidden" name="order_id" value="{{order_obj}}"/>
   <div class="form-group">
     <label class="control-label col-sm-2" for="email">Order Delivery Address:</label>
     <div class="col-sm-10">

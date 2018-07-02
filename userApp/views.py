@@ -1,7 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from userApp.forms import UserForm,UserProfileInfoForm
 from django.utils.http import is_safe_url
-
 
 
 # Extra Imports for the Login and Logout Capabilities
@@ -49,7 +48,11 @@ def register(request):
             user.save()
 
             # Now we deal with the extra info!
-
+            print(user)
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            print(username)
+            print(password)
             # Can't commit yet because we still need to manipulate
             profile = profile_form.save(commit=False)
 
@@ -68,11 +71,23 @@ def register(request):
 
             # Registration Successful!
             registered = True
+            current_user = authenticate(username=username, password=password)
+            if current_user:
+                #Check it the account is active
+                if current_user.is_active:
+                    # Log the user in.
+                    login(request,current_user)
+                    # Send the user back to some page.
+                    # In this case their homepage.
+                    return HttpResponseRedirect(reverse('home'))
+                else:
+                    # If account is not active:
+                    return HttpResponse("Your account is not active.")
 
         else:
             # One of the forms was invalid if this else gets called.
             print(user_form.errors,profile_form.errors)
-
+        return redirect('home')
     else:
         # Was not an HTTP post so we just render the forms as blank.
         user_form = UserForm()
@@ -99,6 +114,8 @@ def user_login(request):
         user = authenticate(username=username, password=password)
 
         # If we have a user
+        print(user)
+        #print("de")
         if user:
             #Check it the account is active
             if user.is_active:
@@ -107,7 +124,10 @@ def user_login(request):
                 # Send the user back to some page.
                 # In this case their homepage.
                 #print(next_)
-                if redirect_to:
+                path=redirect_to[:len(redirect_to)-1]
+                currentdir=path[path.rfind('/')+1:]
+                print(path[path.rfind('/')+1:])
+                if redirect_to is not None and currentdir != 'register':
                     #return redirect(redirect_to)
                     return HttpResponseRedirect(redirect_to)
                 else:
