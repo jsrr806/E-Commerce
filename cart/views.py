@@ -3,7 +3,7 @@ from django.conf import settings
 from .models import Cart
 from categoryApp.models import Product
 # Create your views here.
-User = settings.AUTH_USER_MODEL
+#User = settings.AUTH_USER_MODEL
 def cartHome(request):
     cart_obj, new_obj=Cart.objects.newCart_or_getCart(request)
     #print(cart_id)

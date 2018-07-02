@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 class UserProfileInfo(models.Model):
 
     # Create relationship (don't inherit from User!)
-    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    users = models.OneToOneField(User,on_delete=models.CASCADE)
 
     # Add any additional attributes you want
     address = models.CharField(max_length=30, blank=True)
@@ -16,4 +16,4 @@ class UserProfileInfo(models.Model):
 
     def __str__(self):
         # Built-in attribute of django.contrib.auth.models.User !
-        return self.user.username
+        return self.users.username

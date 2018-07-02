@@ -3,29 +3,45 @@ from django.conf import settings
 from django.db.models.signals import pre_save,post_save,m2m_changed
 # Create your models here.
 from categoryApp.models import Product
-User = settings.AUTH_USER_MODEL
+#from userApp.models import UserProfileInfo
+from django.contrib.auth.models import User
 
 class CartManager(models.Manager):
     def newCart_or_getCart(self,request):
         new_obj=False
         cart_id=request.session.get("cart_id",None)
         active_cart = Cart.objects.filter(id=cart_id)
+
         if active_cart.count() == 1:
             print('Cart already Exist')
             cart_obj=active_cart.first()
             print(cart_obj.user)
             print(cart_id)
+            avail=None
             if request.user.is_authenticated and cart_obj.user is None:
-                cart_obj.user=request.user
-                cart_obj.save()
+                avail = Cart.objects.filter(user=request.user).filter(active=True)
+                print(avail)
+                if avail.count()>0:
+                    print("avail")
+                    for item in cart_obj.products.all():
+                        avail.first().products.add(item)
+                        avail.first().save()
+                    cart_obj.delete()
+                    cart_obj=avail.first()
+                else:
+                    cart_obj.user=request.user
+                    cart_obj.save()
         else:
             print('New Cart')
             print(request.user)
             user_obj=None
             new_obj=True
+            cart_obj = None
             if request.user.is_authenticated:
                 user_obj=request.user
-            cart_obj=Cart.objects.newCart(user=user_obj)
+                cart_obj = Cart.objects.filter(user=user_obj).filter(active=True).first()
+            elif cart_obj is None:
+                cart_obj=Cart.objects.newCart(user=user_obj)
             request.session['cart_id']=cart_obj.id
         return cart_obj,new_obj
 
@@ -43,6 +59,7 @@ class Cart(models.Model):
     total = models.DecimalField(default=0.00,max_digits=10,decimal_places=2)
     updated = models.DateTimeField(auto_now=True)
     timestamp = models.DateTimeField(auto_now_add=True)
+    active = models.BooleanField(default=True)
 
     objects = CartManager()
     def __str__(self):
